@@ -1,0 +1,231 @@
+#Data Description
+#Characterize the mean, meadian and standard deviation of all variables in your dataset relevant to your hypothesis.
+#Create Histograms of each relevant variable.
+
+#THESE ARE THE IMPORTS
+import sys
+import statistics
+import numpy as np
+import matplotlib.pyplot as plt
+
+#DEFINING VARIABLES
+file=open(input())
+
+first=True
+
+AQI=[] #median AQI
+CO=[] #days of carbon monoxide
+NO2=[] #days of nitrogen dioxide
+O3=[] #days of ozone
+PM25=[] #days of 2.5 micrometer particulate matter
+PM10=[] #days of10 micrometer particulate matter
+
+#DATA ANALYSIS 
+for line in file:
+    if first==True: #Header capture line 
+        data=line.split(",")
+        first=False
+        #print(data)
+    else:
+        data=line.split(",")
+        AQI.append(float(data[13]))
+        CO.append(float(data[14]))
+        NO2.append(float(data[15]))
+        O3.append(float(data[16]))
+        PM25.append(float(data[17]))
+        PM10.append(float(data[18]))
+
+#FINDING MEAN, MEDIAN, AND STANDARD DEVATION OF VARIABLES
+print("The mean of the median AQI for all locations is", int(statistics.mean(AQI)),", the median is", int(statistics.median(AQI)), ", and standard devation is", int(statistics.pstdev(AQI)))
+print("The mean of the days of CO for all locations is", int(statistics.mean(CO)),", the median is", int(statistics.median(CO)), ", and standard devation is", int(statistics.pstdev(CO)))
+print("The mean of the days of NO2 for all locations is", int(statistics.mean(NO2)),", the median is", int(statistics.median(NO2)), ", and standard devation is", int(statistics.pstdev(NO2)))
+print("The mean of the days of O3 for all locations is", int(statistics.mean(O3)),", the median is", int(statistics.median(O3)), ", and standard devation is", int(statistics.pstdev(O3)))
+print("The mean of the days of PM 2.5 for all locations is", int(statistics.mean(PM25)),", the median is", int(statistics.median(PM25)), ", and standard devation is", int(statistics.pstdev(PM25)))
+print("The mean of the days of PM 10 for all locations is", int(statistics.mean(PM10)),", the median is", int(statistics.median(PM10)), ", and standard devation is", int(statistics.pstdev(PM10)))
+
+
+#CREATING HISTOGRAMS- 1var
+fig1, ax1 = plt.subplots()
+ax1.hist(CO,bins=15)
+ax1.set_title('CO')
+ax1.set_xlabel("Days of CO")
+ax1.set_ylabel("Frequency")
+
+fig2, ax2 = plt.subplots()
+ax2.hist(NO2,bins=15)
+ax2.set_title("NO2")
+ax2.set_xlabel("Days of NO2")
+ax2.set_ylabel("Frequency")
+
+fig3, ax3 = plt.subplots()
+ax3.hist(O3,bins=15)
+ax3.set_title("O3")
+ax3.set_xlabel("Days of O3")
+ax3.set_ylabel("Frequency")
+
+fig4, ax4 = plt.subplots()
+ax4.hist(PM25,bins=15)
+ax4.set_title("PM 2.5")
+ax4.set_xlabel("Days of PM 2.5")
+ax4.set_ylabel("Frequency")
+               
+fig5, ax5 = plt.subplots()
+ax5.hist(PM10,bins=15)
+ax5.set_title("PM 10")
+ax5.set_xlabel("Days of PM 10")
+ax5.set_ylabel("Frequency")
+
+fig6, ax6 = plt.subplots()
+ax6.hist(AQI,bins=15)
+ax6.set_title("AQI")
+ax6.set_xlabel("AQI")
+ax6.set_ylabel("Frequency")
+
+#Correlation
+#Calculate Pearson and Spearman Correlation Coefficients between key variables relevant to your hypothesis.
+#Conduct Linear regression on the above variable sets.
+#Generate scatter plots of real data with linear regression lines overlaid
+
+#IMPORTS
+from scipy.stats import pearsonr, spearmanr, linregress
+import matplotlib.pyplot as plt
+import numpy as np
+
+#FINDING CORRELATIONS
+CO_p=pearsonr(AQI, CO)
+CO_s=spearmanr(AQI, CO)
+
+NO2_p=pearsonr(AQI, NO2)
+NO2_s=spearmanr(AQI, NO2)
+
+O3_p=pearsonr(AQI, O3)
+O3_s=spearmanr(AQI, O3)
+
+PM25_p=pearsonr(AQI, PM25)
+PM25_s=spearmanr(AQI, PM25)
+
+PM10_p=pearsonr(AQI, PM10)
+PM10_s=spearmanr(AQI, PM10)
+
+#RESULTS
+print("AQI and days of CO has a pearson correlation of", CO_p[0]," and a spearman correlation coefficient of", CO_s[0])
+print("AQI and days of NO2 has a pearson correlation of", NO2_p[0], "and a spearman correlation coefficient of", NO2_s[0])
+print("AQI and days of O3 has a pearson correlation of", O3_p[0], "and a spearman correlation coefficient of", O3_s[0])
+print("AQI and days of PM 2.5 has a pearson correlation of", PM25_p[0],"and a spearman correlation coefficient of", PM25_s[0])
+print("AQI and days of PM 10 has a pearson correlation of", PM10_p[0], "and a spearman correlation coefficient of", PM10_s[0])
+
+fig1, ax1 = plt.subplots()
+ax1.scatter(AQI, CO)
+m=linregress(AQI,CO)[0]
+b=linregress(AQI,CO)[1]
+print(m)
+print(b)
+y=[]
+for items in AQI:
+    z=items*m+b
+    y.append(z)
+ax1.plot(AQI,y, color='orange')#ask how
+ax1.set_title('AQI vs. Days of CO')
+ax1.set_xlabel("AQI")
+ax1.set_ylabel("Days of CO")
+
+fig2, ax2 = plt.subplots()
+ax2.scatter(AQI, NO2)
+m=linregress(AQI,NO2)[0]
+b=linregress(AQI,NO2)[1]
+y=[]
+for items in AQI:
+    z=items*m+b
+    y.append(z)
+ax2.plot(AQI,y, color='orange')#ask how
+ax2.set_title('AQI vs. Days of NO2')
+ax2.set_xlabel("AQI")
+ax2.set_ylabel("Days of NO2")
+
+fig3, ax3 = plt.subplots()
+ax3.scatter(AQI, O3)
+m=linregress(AQI,O3)[0]
+b=linregress(AQI,O3)[1]
+y=[]
+for items in AQI:
+    z=items*m+b
+    y.append(z)
+ax3.plot(AQI,y, color='orange')#ask how
+ax3.set_title('AQI vs. Days of O3')
+ax3.set_xlabel("AQI")
+ax3.set_ylabel("Days of O3")
+
+fig4, ax4 = plt.subplots()
+ax4.scatter(AQI, PM25)
+m=linregress(AQI,PM25)[0]
+b=linregress(AQI,PM25)[1]
+y=[]
+for items in AQI:
+    z=items*m+b
+    y.append(z)
+ax4.plot(AQI,y, color='orange')#ask how
+ax4.set_title('AQI vs. Days of PM 2.5')
+ax4.set_xlabel("AQI")
+ax4.set_ylabel("Days of PM 2.5")
+
+fig5, ax5 = plt.subplots()
+ax5.scatter(AQI, PM10)
+m=linregress(AQI,PM10)[0]
+b=linregress(AQI,PM10)[1]
+y=[]
+for items in AQI:
+    z=items*m+b
+    y.append(z)
+ax5.plot(AQI,y, color='orange')#ask how
+ax5.set_title('AQI vs. Days of PM 10')
+ax5.set_xlabel("AQI")
+ax5.set_ylabel("Days of PM 10")
+
+#Dimensionality reduction
+#Conduct Principle Components Analysis using all quantitative variables in your data set for across all samples.
+#Extract principle component weights and plot using a bar chart.
+#Visualize your data on PC1 and PC2. Color code data points by relevant categories.
+
+#IMPORTS
+import numpy as np
+from sklearn.decomposition import PCA
+import matplotlib.pyplot as plt
+
+#VARIABLES
+air=[CO,NO2,O3,PM25,PM10]
+data=np.array(air)
+print(data)
+
+#COMPUTING PCA
+pca=PCA(n_components=4)
+
+principal_components=pca.fit_transform(data)
+print(principal_components)
+#DETERMINING WEIGHT
+component_weights=pca.explained_variance_ratio_
+componet=[1,2,3,4]
+
+#GENERATING FIGURE 1
+plt.bar(componet, component_weights)
+
+#LABELS
+plt.title('Principal Component Weights')
+plt.xlabel('Features')
+plt.ylabel('Weight')
+
+#GENERATING FIGURE 2
+fig, ax = plt.subplots()
+ax.scatter(principal_components[1,0],principal_components[1,1],c="red")
+ax.scatter(principal_components[2,0],principal_components[2,1],c="blue")
+ax.scatter(principal_components[3,0],principal_components[3,1],c="orange")
+ax.scatter(principal_components[4,0],principal_components[4,1],c="red") 
+#ax.scatter(principal_components[5,0],principal_components[5,1],c="red")
+#orange and blue are the best ways to predict aqi
+#add more stuff about AQI in plot 
+
+#LABELS
+label_X = "PC1 (" + str(np.round(pca.explained_variance_ratio_[0]*100, decimals=2)) + "%)"
+label_Y = "PC2 (" + str(np.round(pca.explained_variance_ratio_[1]*100, decimals=2)) + "%)"
+ax.set_xlabel(label_X)
+ax.set_ylabel(label_Y)
+ax.set_title("PC1 vs. PC2")
